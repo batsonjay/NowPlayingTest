@@ -1,0 +1,253 @@
+# NowPlayingTest Project Rules
+
+## Project Structure
+
+- The project follows a modular file structure with clear separation of concerns
+- New files should be created in the appropriate directories based on their functionality
+- TypeScript is used for all new files
+- React Context is used for state management
+- Hooks are used for accessing context and functionality
+
+## Naming Conventions
+
+- Use camelCase for variable and function names
+- Use PascalCase for component names and types
+- Use UPPER_CASE for constants
+- Prefix new TrackPlayer functions with "player" to avoid conflicts with old functions
+- Use descriptive names that clearly indicate the function's purpose
+
+## Code Style
+
+- Use async/await for asynchronous operations
+- Wrap TrackPlayer operations in try/catch blocks
+- Use optional chaining (?.) for potentially undefined values
+- Use nullish coalescing operator (??) for default values
+- Use destructuring for props and state
+- Use functional components with hooks instead of class components
+- Use TypeScript interfaces for defining props and state types
+
+## Documentation
+
+- Add JSDoc comments for functions and components
+- Include parameter descriptions and return types
+- Document any non-obvious behavior or edge cases
+- Keep documentation up to date with code changes
+
+## Error Handling
+
+- Wrap all TrackPlayer operations in try/catch blocks
+- Log detailed error messages with console.error
+- Implement graceful degradation for error cases
+- Use defensive programming techniques to prevent errors
+
+## Testing
+
+- Test each phase of the migration before proceeding to the next
+- Test on physical iOS devices for accurate results
+- Test background playback and Now Playing widget functionality
+- Test edge cases and error scenarios
+
+## Migration Strategy
+
+- Follow the phased approach outlined in MIGRATION_PLAN.md
+- Maintain backward compatibility with the existing API
+- Use the hybrid naming approach to avoid conflicts
+- Implement the compatibility layer for backward compatibility
+- Test thoroughly at each phase
+
+## File Organization
+
+```
+utils/
+  trackPlayer/
+    index.ts                  // Re-exports everything for easy imports
+    setup.ts                  // Player setup and initialization
+    metadata.ts               // Metadata fetching and handling
+    playback.ts               // Core playback functions
+    queue.ts                  // Queue management
+    types.ts                  // Shared type definitions
+    events.ts                 // Event handling
+    service.ts                // Playback service implementation
+  
+context/
+  TrackPlayerContext/
+    index.tsx                 // Main context and provider
+    hooks.ts                  // Custom hooks for accessing player features
+    state.ts                  // State management
+    compatibility.tsx         // Compatibility layer
+```
+
+## Implementation Details
+
+### TrackPlayer Setup
+
+- TrackPlayer must be set up before use
+- The setup function should be called in the TrackPlayerProvider
+- The setup function should configure the player for background playback
+- The setup function should register the playback service
+
+```typescript
+const setupTrackPlayer = async () => {
+  try {
+    await TrackPlayer.setupPlayer({
+      waitForBuffer: true,
+    });
+    
+    await TrackPlayer.updateOptions({
+      capabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.Stop,
+        Capability.SeekTo,
+      ],
+      compactCapabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.Stop,
+      ],
+      notificationCapabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.Stop,
+      ],
+      backwardJumpInterval: 10,
+      forwardJumpInterval: 10,
+    });
+    
+    await registerPlaybackService();
+    return true;
+  } catch (error) {
+    console.error('Error setting up TrackPlayer:', error);
+    return false;
+  }
+};
+```
+
+### Playback Service
+
+- The playback service handles events from TrackPlayer
+- The playback service should be registered once
+- The playback service should handle remote play, pause, and stop events
+- The playback service should handle metadata updates
+
+```typescript
+let isServiceRegistered = false;
+
+const registerPlaybackService = async () => {
+  if (isServiceRegistered) {
+    console.log('PlaybackService already registered');
+    return;
+  }
+  
+  try {
+    await TrackPlayer.registerPlaybackService(() => require('../utils/trackPlayerService').PlaybackService);
+    isServiceRegistered = true;
+  } catch (error) {
+    console.error('Failed to register PlaybackService:', error);
+  }
+};
+```
+
+### Metadata Handling
+
+- For live streams: Artist name goes in title field, song title in description
+- For podcasts: Standard title/artist/description mapping
+- Metadata should be updated when new information is available
+- Metadata should be displayed in the Now Playing widget
+
+```typescript
+const updateNowPlayingMetadata = async (metadata) => {
+  try {
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+    if (currentTrack === null) {
+      console.log('No track playing, cannot update metadata');
+      return false;
+    }
+    
+    await TrackPlayer.updateMetadataForTrack(currentTrack, {
+      title: metadata?.title || 'Balearic FM',
+      artist: metadata?.artist || 'Balearic FM',
+      description: metadata?.description || 'Live radio stream',
+      artwork: metadata?.artwork || DEFAULT_ARTWORK_URL,
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error updating metadata:', error);
+    return false;
+  }
+};
+```
+
+### Queue Management
+
+- Use TrackPlayer's native queue for technical aspects
+- Maintain a lightweight UI queue for visual feedback
+- Keep the two queues in sync through the TrackPlayerContext
+- Use the queue for podcast playback
+
+```typescript
+const enqueueTrack = async (track) => {
+  try {
+    await TrackPlayer.add(track);
+    setQueue((prevQueue) => [...prevQueue, track]);
+    return true;
+  } catch (error) {
+    console.error('Error enqueueing track:', error);
+    return false;
+  }
+};
+```
+
+### Compatibility Layer
+
+- The compatibility layer adapts the new TrackPlayer API to match the old PlaybackContext API
+- The compatibility layer should provide functions with the same names as the old API
+- The compatibility layer should mark old functions as deprecated
+- The compatibility layer should redirect calls to the new API
+
+```typescript
+// Compatibility methods with old names
+const playLiveStream = async () => {
+  console.warn('playLiveStream is deprecated. Use playerPlayLiveStream instead.');
+  return playerPlayLiveStream();
+};
+
+const playTrack = async (track) => {
+  console.warn('playTrack is deprecated. Use playPodcast instead.');
+  return playPodcast(track);
+};
+
+const dispatchPlayback = async (action) => {
+  console.warn('dispatchPlayback is deprecated. Use the new TrackPlayer API instead.');
+  switch (action.type) {
+    case 'PLAY_LIVE':
+      return playerPlayLiveStream();
+    case 'PLAY_PODCAST':
+      return enqueueTrack(action.payload);
+    // ...
+  }
+};
+```
+
+## iOS Configuration
+
+- The Info.plist file must be configured for background audio
+- The background modes must include audio playback
+- The audio session must be configured correctly
+- The app must request the necessary permissions
+
+```xml
+<key>UIBackgroundModes</key>
+<array>
+  <string>audio</string>
+</array>
+```
+
+## User Preferences
+
+- The user prefers a clean, modular code structure
+- The user values comprehensive documentation
+- The user prefers a phased approach to migration
+- The user values backward compatibility
+- The user prefers TypeScript for type safety
