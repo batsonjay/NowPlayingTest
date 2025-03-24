@@ -9,7 +9,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jabventures.NowPlayingTest",
+      "developmentTeam": "KH23Y62G7A"
     },
     "android": {
       "adaptiveIcon": {
