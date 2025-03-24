@@ -42,19 +42,42 @@ npm install -g eas-cli
 #### 1.2. Clone and Set Up the Repository
 
 ```bash
-# Clone the repository
+# Clone the NowPlayingTest repository
+git clone https://github.com/batsonjay/NowPlayingTest.git
+cd NowPlayingTest
+
+# Install dependencies
+npm install
+```
+
+If you're setting up the BalearicFmRadio project on a new computer:
+
+```bash
+# Clone the BalearicFmRadio repository
 git clone https://github.com/your-username/BalearicFmRadio.git
 cd BalearicFmRadio
 
 # Install dependencies
 npm install
 
-# Copy the migration documentation from NowPlayingTest
-cp /path/to/NowPlayingTest/READ_ME_FIRST.md .
-cp /path/to/NowPlayingTest/MIGRATION_NOTES.md .
-cp /path/to/NowPlayingTest/MIGRATION_PLAN.md .
-cp /path/to/NowPlayingTest/MEDIA_PLAYER_LEARNINGS.md .
-cp /path/to/NowPlayingTest/README_TRACK_PLAYER.md .
+# Copy the migration documentation from NowPlayingTest repository
+# Option 1: If you've already cloned the NowPlayingTest repository
+cp ../NowPlayingTest/READ_ME_FIRST.md .
+cp ../NowPlayingTest/MIGRATION_NOTES.md .
+cp ../NowPlayingTest/MIGRATION_PLAN.md .
+cp ../NowPlayingTest/MEDIA_PLAYER_LEARNINGS.md .
+cp ../NowPlayingTest/README_TRACK_PLAYER.md .
+cp ../NowPlayingTest/REQUIRED_DEVELOPER_SETUP.md .
+
+# Option 2: Clone directly from GitHub
+git clone https://github.com/batsonjay/NowPlayingTest.git temp-nowplaying
+cp temp-nowplaying/READ_ME_FIRST.md .
+cp temp-nowplaying/MIGRATION_NOTES.md .
+cp temp-nowplaying/MIGRATION_PLAN.md .
+cp temp-nowplaying/MEDIA_PLAYER_LEARNINGS.md .
+cp temp-nowplaying/README_TRACK_PLAYER.md .
+cp temp-nowplaying/REQUIRED_DEVELOPER_SETUP.md .
+rm -rf temp-nowplaying
 ```
 
 #### 1.3. Install react-native-track-player
