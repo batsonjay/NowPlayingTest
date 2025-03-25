@@ -146,7 +146,7 @@ export const fetchCurrentTrackMetadata = async (): Promise<{
     console.log('Fetching current track metadata from API...');
     const response = await fetch(METADATA_URL, {
       headers: {
-        'User-Agent': 'AppName/1.0.0',
+        'User-Agent': 'BalearicFM-ReactNative/1.0.0',
       },
     });
     
