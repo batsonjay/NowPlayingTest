@@ -48,35 +48,36 @@ This approach allows for incremental migration while maintaining a clear separat
 
 ### File Organization Strategy
 
-To ensure better maintainability and code organization, the implementation will use a more modular file structure than presented in the code examples. Here's the recommended file organization:
+To balance modularity with ease of navigation, we'll use a consolidated file structure that groups related functionality while maintaining clear separation of concerns:
 
 ```
 utils/
   trackPlayer/
     index.ts                  // Re-exports everything for easy imports
-    setup.ts                  // Player setup and initialization
-    metadata.ts               // Metadata fetching and handling
-    playback.ts               // Core playback functions
-    queue.ts                  // Queue management
-    types.ts                  // Shared type definitions
-    events.ts                 // Event handling
+    core.ts                   // Player setup, initialization, and core functions
+    mediaHandling.ts          // Metadata fetching and media operations
     service.ts                // Playback service implementation
+    types.ts                  // Shared type definitions and constants
   
 context/
-  TrackPlayerContext/
-    index.tsx                 // Main context and provider
-    hooks.ts                  // Custom hooks for accessing player features
-    state.ts                  // State management
-    compatibility.tsx         // Compatibility layer
+  TrackPlayerContext.tsx      // Main context, provider, and hooks
+  CompatibilityLayer.tsx      // Backward compatibility with old API
 ```
 
 This structure provides several benefits:
-1. **Single Responsibility**: Each file has a focused purpose
-2. **Better Maintainability**: Smaller files are easier to understand and modify
-3. **Improved Testability**: Isolated components are easier to test
-4. **Future-Proofing**: Easier to extend or modify specific parts without affecting others
+1. **Logical Grouping**: Related functionality is grouped together
+2. **Easier Navigation**: Fewer files to navigate between
+3. **Clear Boundaries**: Still maintains separation between major concerns
+4. **Maintainability**: Files are organized by functional area rather than being too granular
 
-The code examples in this migration plan are presented as larger files for clarity, but should be implemented using this modular structure.
+The consolidated structure reduces the number of files while still keeping the codebase organized and maintainable:
+
+- **core.ts** combines setup and basic playback operations
+- **mediaHandling.ts** handles all metadata and media-related operations
+- **TrackPlayerContext.tsx** includes both the context definition and hooks
+- **CompatibilityLayer.tsx** is kept separate to clearly identify legacy code
+
+The code examples in this migration plan are presented as larger files for clarity, which aligns well with this more consolidated approach.
 
 ### Phase 1: Add TrackPlayer Dependencies
 
