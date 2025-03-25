@@ -113,7 +113,6 @@ export const setupTrackPlayer = async (): Promise<boolean> => {
         Capability.Play,
         Capability.Pause,
         Capability.Stop,
-        Capability.SeekTo,
       ],
       compactCapabilities: [Capability.Play, Capability.Pause, Capability.Stop],
       notificationCapabilities: [

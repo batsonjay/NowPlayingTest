@@ -486,7 +486,6 @@ The code examples in this migration plan are presented as larger files for clari
            Capability.Play,
            Capability.Pause,
            Capability.Stop,
-           Capability.SeekTo,
          ],
          compactCapabilities: [Capability.Play, Capability.Pause, Capability.Stop],
          notificationCapabilities: [
@@ -693,16 +692,7 @@ The code examples in this migration plan are presented as larger files for clari
      }
    };
    
-   // Seek to position
-   export const seekTo = async (position: number): Promise<boolean> => {
-     try {
-       await TrackPlayer.seekTo(position);
-       return true;
-     } catch (error) {
-       console.error('Error seeking:', error);
-       return false;
-     }
-   };
+   // No seeking functionality implemented in this phase
    ```
 
 ### Phase 4: Implement Compatibility Layer
@@ -805,7 +795,6 @@ export const usePlayback = () => {
 
 2. **Test podcast playback**:
    - Verify episode playback
-   - Check seeking functionality
    - Test background playback
    - Verify remote controls
 
