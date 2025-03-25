@@ -19,17 +19,22 @@ The following documents have been created to guide the migration process:
    - Typos and issues in the migration plan with fixes
    - Implementation priorities
 
-4. **MEDIA_PLAYER_LEARNINGS.md**
+4. **COMPATIBILITY_DECISION.md**
+   - Explanation of the decision not to use a compatibility layer
+   - Reasoning and benefits of direct migration
+   - Alternative implementation approach
+
+5. **MEDIA_PLAYER_LEARNINGS.md**
    - Technical implementation details
    - Best practices for TrackPlayer
    - Code examples for key functionality
 
-5. **README_TRACK_PLAYER.md**
+6. **README_TRACK_PLAYER.md**
    - Overview of the NowPlayingTest project
    - Building and running instructions
    - General implementation details
 
-6. **REQUIRED_DEVELOPER_SETUP.md**
+7. **REQUIRED_DEVELOPER_SETUP.md**
    - Development environment setup instructions
    - Steps for configuring a new computer for development
    - Troubleshooting common setup issues
@@ -50,15 +55,20 @@ When starting a new context in the BalearicFmRadio project, read these documents
    - Highlights important implementation details
    - Identifies issues to be aware of
 
-4. **MIGRATION_PLAN.md**
+4. **COMPATIBILITY_DECISION.md**
+   - Explains the decision not to use a compatibility layer
+   - Provides reasoning and alternative approach
+
+5. **MIGRATION_PLAN.md**
    - Provides the detailed migration strategy
    - Contains implementation phases and code examples
+   - Note: The compatibility layer described in this document has been superseded by the approach in COMPATIBILITY_DECISION.md
 
-5. **MEDIA_PLAYER_LEARNINGS.md**
+6. **MEDIA_PLAYER_LEARNINGS.md**
    - Offers technical details and best practices
    - Provides additional code examples
 
-6. **README_TRACK_PLAYER.md** (optional)
+7. **README_TRACK_PLAYER.md** (optional)
    - Gives background on the NowPlayingTest project
 
 ## Getting Started
@@ -68,6 +78,7 @@ Begin by reading through the documents in the recommended order. Each document s
 - **READ_ME_FIRST.md**: Provides this overview and reading guide
 - **REQUIRED_DEVELOPER_SETUP.md**: Ensures proper development environment configuration
 - **MIGRATION_NOTES.md**: Contains critical context and implementation considerations
+- **COMPATIBILITY_DECISION.md**: Explains the decision not to use a compatibility layer
 - **MIGRATION_PLAN.md**: Details the step-by-step migration strategy
 - **MEDIA_PLAYER_LEARNINGS.md**: Offers technical implementation details
 - **README_TRACK_PLAYER.md**: Gives background on the NowPlayingTest project
